@@ -1,6 +1,8 @@
 package br.com.reboucas.electricapp.resources;
 
 import java.net.URI;
+import java.util.List;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,9 +31,19 @@ public class LeituraResources {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "/ultima", method = RequestMethod.GET)
 	public ResponseEntity<Leitura> ultimaLeitura() {
-		return ResponseEntity.status(HttpStatus.OK).body(leituraService.utimaLeitura());
+		return ResponseEntity.status(HttpStatus.OK).body(leituraService.ultimaLeitura());
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<Leitura>> listar() {
+		return ResponseEntity.status(HttpStatus.OK).body(leituraService.listar());
+	}
+	
+	@RequestMapping(value = "/medicao", method = RequestMethod.GET)
+	public ResponseEntity<Leitura> getMedicao() {
+		return ResponseEntity.status(HttpStatus.OK).body(leituraService.getMedicao());
 	}
 
 }

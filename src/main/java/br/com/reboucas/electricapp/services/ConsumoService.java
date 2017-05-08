@@ -1,11 +1,14 @@
 package br.com.reboucas.electricapp.services;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.reboucas.electricapp.domain.Consumo;
+import br.com.reboucas.electricapp.domain.Leitura;
 import br.com.reboucas.electricapp.repository.ConsumoRepository;
 
 @Service
@@ -13,6 +16,8 @@ public class ConsumoService {
 
 	@Autowired
 	private ConsumoRepository consumoRepository;
+	@Autowired
+	private LeituraService leituraService;
 
 	public BigDecimal consumoTotal() {
 		return consumoRepository.consumoTotal();
@@ -24,6 +29,11 @@ public class ConsumoService {
 	}
 
 	public BigDecimal consumoPorMes(Date ultimaLeitura, Date proximaLeitura) {
+		Calendar date = Calendar.getInstance();
+		date.setTime(proximaLeitura);
+		date.add(Calendar.DATE, -1);
+		proximaLeitura = date.getTime();
+		
 		List<Consumo> consumos = consumoRepository.findByDataBetween(ultimaLeitura, 
 				proximaLeitura);
 		BigDecimal consumoMes = new BigDecimal("0.00");
@@ -33,9 +43,33 @@ public class ConsumoService {
 		}
 		return consumoMes;
 	}
+	
+	public List<Leitura> leituraConsumoMes() {
+		List<Leitura> leituras = leituraService.listar();		
+		List<Leitura> leiturasEnviar = new ArrayList<>();
+		BigDecimal consumoMes;
+		
+		for (int i = leituras.size()-1; i > 0; i--) {
+			consumoMes = leituras.get(i).getValorUltimaLeitura()
+					.subtract(leituras.get(i-1).getValorUltimaLeitura());
+			
+			leituras.get(i).setValorUltimaLeitura(consumoMes);
+			leiturasEnviar.add(leituras.get(i));
+		}
+		
+		leituras.get(0).setValorUltimaLeitura(consumoPorMes(leituras.get(0).getUltimaLeitura(), 
+				leituras.get(0).getProximaLeitura()));
+		
+		leiturasEnviar.add(leituras.get(0));
+		return leiturasEnviar;
+	}
 
 	public Consumo getConsumo(Long id) {
 		return consumoRepository.findOne(id);
 	}
+	
+	public void atualizar(Consumo consumo) {
+		consumoRepository.save(consumo);
+	} 
 
 }

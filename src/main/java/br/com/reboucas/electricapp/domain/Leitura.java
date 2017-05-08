@@ -26,8 +26,7 @@ public class Leitura {
 	@JsonFormat(pattern="dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date ultimaLeitura;
-	
-	@NotNull
+		
 	@JsonFormat(pattern="dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date proximaLeitura;
@@ -44,29 +43,29 @@ public class Leitura {
 
 	@JsonFormat(pattern="dd/MM/yyyy")
 	@JsonSerialize(using=JsonDateSerializer.class)
-	public Date getUltimaLeitura() {
-		return ultimaLeitura;
+	public Date getUltimaLeitura() {		
+		return this.ultimaLeitura;
 	}
 
 	public void setUltimaLeitura(Date ultimaLeitura) {
-		Calendar data = Calendar.getInstance();
-		data.setTime(ultimaLeitura);
-		data.add(Calendar.DATE, +1);
-		this.ultimaLeitura = data.getTime();
+		Calendar date = Calendar.getInstance();
+		date.setTime(ultimaLeitura);	
+		date.add(Calendar.DATE, +1);
+		this.ultimaLeitura = date.getTime();
 		setProximaLeitura(this.ultimaLeitura);
 	}
 
 	@JsonFormat(pattern="dd/MM/yyyy")
 	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getProximaLeitura() {
-		return proximaLeitura;
+		return this.proximaLeitura;
 	}
 
 	public void setProximaLeitura(Date ultimaLeitura) {
-		Calendar aux = Calendar.getInstance();
-		aux.setTime(ultimaLeitura);
-		aux.add(Calendar.DATE, +31);
-		this.proximaLeitura = aux.getTime();
+		Calendar date = Calendar.getInstance();
+		date.setTime(ultimaLeitura);
+		date.add(Calendar.DATE, +31);
+		this.proximaLeitura = date.getTime();
 	}
 
 	public BigDecimal getValorUltimaLeitura() {

@@ -2,6 +2,8 @@ package br.com.reboucas.electricapp.resources;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.List;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,5 +49,10 @@ public class ConsumoResources {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Consumo> getConsumo(@PathVariable("id") Long id ) {
 		return ResponseEntity.status(HttpStatus.OK).body(consumoService.getConsumo(id));
+	}
+	
+	@RequestMapping(value = "/por_mes", method = RequestMethod.GET)
+	public ResponseEntity<List<Leitura>> leiturasConsumoMes() {
+		return ResponseEntity.status(HttpStatus.OK).body(consumoService.leituraConsumoMes());
 	}
 }

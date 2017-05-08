@@ -43,7 +43,7 @@ public class Consumo {
 
 	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getData() {		
-		return this.data;		
+		return this.data;
 	}
 
 	public void setData(Date data) {

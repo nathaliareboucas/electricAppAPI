@@ -1,7 +1,6 @@
 package br.com.reboucas.electricapp.serial;
 
 import java.math.BigDecimal;
-
 import br.com.reboucas.electricapp.config.ApplicationContextHolder;
 import br.com.reboucas.electricapp.domain.Consumo;
 import br.com.reboucas.electricapp.services.ConsumoService;
@@ -11,7 +10,6 @@ public class Protocolo {
 	private Consumo consumo;
 	private String leituraComando;
 	private BigDecimal consumoTotal;
-	
 	private ConsumoService consumoService;
 
 	public Protocolo() {
