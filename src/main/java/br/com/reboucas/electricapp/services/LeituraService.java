@@ -3,7 +3,10 @@ package br.com.reboucas.electricapp.services;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.reboucas.electricapp.domain.Leitura;
@@ -39,14 +42,11 @@ public class LeituraService {
 	public Leitura getMedicao() {
 		Leitura ultimaLeitura = ultimaLeitura();
 		Date hoje = new FormataData().getDataAtual();
-		//BigDecimal consumoTotal;
 		BigDecimal consumoMes;
 		
 		while (hoje.after(ultimaLeitura.getProximaLeitura())) {
 			if (ultimaLeitura.getId() != 1) {
-				//consumoTotal = consumoService.consumoTotal();
 				consumoMes = consumoService.consumoPorMes(ultimaLeitura.getUltimaLeitura(), ultimaLeitura.getProximaLeitura());
-				//ultimaLeitura.setValorUltimaLeitura(consumoTotal.subtract(consumoMes));
 				Leitura leituraAnterior = buscar(ultimaLeitura.getId()-1);
 				ultimaLeitura.setValorUltimaLeitura(leituraAnterior.getValorUltimaLeitura()
 						.add(consumoMes));
@@ -55,15 +55,13 @@ public class LeituraService {
 			}
 			
 			Leitura leitura = new Leitura();
-			Calendar date = Calendar.getInstance();
-			date.setTime(ultimaLeitura.getProximaLeitura());
-			date.add(Calendar.DATE, -1);
-			leitura.setUltimaLeitura(date.getTime());
+			TimeZone tz = TimeZone.getTimeZone("America/Sao_Paulo");
+			TimeZone.setDefault(tz);
+			Calendar ca = GregorianCalendar.getInstance(tz);
+			ca.setTime(ultimaLeitura.getProximaLeitura());
+			leitura.setUltimaLeitura(ca.getTime());
 			
-			//consumoTotal = consumoService.consumoTotal();
 			consumoMes = consumoService.consumoPorMes(leitura.getUltimaLeitura(), leitura.getProximaLeitura());
-			//leitura.setValorUltimaLeitura(consumoTotal.subtract(consumoMes));
-			//leitura.setValorUltimaLeitura(consumoTotal);
 			leitura.setValorUltimaLeitura(ultimaLeitura.getValorUltimaLeitura()
 					.add(consumoMes));
 			

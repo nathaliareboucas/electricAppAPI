@@ -18,8 +18,7 @@ public class LampadaService {
 	
 	public Lampada acionaLampada(Lampada lamp) {
 		SerialRxTx.sendData(lamp.getId().toString());
-		atualizar(lamp);
-		return lamp;
+		return buscar(lamp.getId());
 	}
 	
 	public Lampada salvar(Lampada lampada) {
@@ -32,7 +31,7 @@ public class LampadaService {
 		if (lampadas.isEmpty()) {
 			for(int i = 1; i <= 6; i++) {
 				Lampada lamp = new Lampada();
-				lamp.setValor("desligada");
+				lamp.setValor(String.valueOf(i) + "desligada");
 				lampadas.add(salvar(lamp));
 			}		
 		}
@@ -41,5 +40,9 @@ public class LampadaService {
 	
 	public void atualizar(Lampada lamp) {
 		lampadaRepository.save(lamp);
+	}
+	
+	public Lampada buscar(Long id){
+		return lampadaRepository.findOne(id);
 	}
 }

@@ -19,7 +19,7 @@ public class SerialRxTx implements SerialPortEventListener {
 	private static OutputStream output; 				   // objeto para escrita na serial
 	private static final int TIME_OUT = 1000;      // tempo de espera de comunicação
 	private static int DATA_RATE = 9600;          // velocidade da comunicação
-	private String serialPortName = "COM7";      //porta serial
+	private String serialPortName = "COM22";      //porta serial
 
 	public boolean iniciaSerial() {
 		boolean status = false;
@@ -93,7 +93,7 @@ public class SerialRxTx implements SerialPortEventListener {
 
 				if (input.ready()) {
 					protocolo.setLeituraComando(input.readLine()); // recebe valor consumo e atribui a leituraComando do protocolo
-					sendData(String.valueOf(protocolo.getConsumoTotal())); // envia o consumo total em kW
+					//sendData(String.valueOf(protocolo.getConsumoTotal())); // envia o consumo total em kW
 				}
 
 				break;

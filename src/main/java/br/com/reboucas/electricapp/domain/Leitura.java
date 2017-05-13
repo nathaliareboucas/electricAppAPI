@@ -3,6 +3,9 @@ package br.com.reboucas.electricapp.domain;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -48,10 +52,12 @@ public class Leitura {
 	}
 
 	public void setUltimaLeitura(Date ultimaLeitura) {
-		Calendar date = Calendar.getInstance();
-		date.setTime(ultimaLeitura);	
-		date.add(Calendar.DATE, +1);
-		this.ultimaLeitura = date.getTime();
+		TimeZone tz = TimeZone.getTimeZone("America/Sao_Paulo");
+		TimeZone.setDefault(tz);
+		Calendar ca = GregorianCalendar.getInstance(tz);
+		ca.setTime(ultimaLeitura);	
+//		ca.add(Calendar.DATE, +1);
+		this.ultimaLeitura = ca.getTime();
 		setProximaLeitura(this.ultimaLeitura);
 	}
 
@@ -62,18 +68,43 @@ public class Leitura {
 	}
 
 	public void setProximaLeitura(Date ultimaLeitura) {
-		Calendar date = Calendar.getInstance();
-		date.setTime(ultimaLeitura);
-		date.add(Calendar.DATE, +31);
-		this.proximaLeitura = date.getTime();
+		TimeZone tz = TimeZone.getTimeZone("America/Sao_Paulo");
+		TimeZone.setDefault(tz);
+		Calendar ca = GregorianCalendar.getInstance(tz);
+		ca.setTime(ultimaLeitura);
+		
+		if (verificaFevereiro(ca) && verificaAnoBisexto(ca)) {
+			ca.add(Calendar.DATE, +28);
+		} else {
+			ca.add(Calendar.DATE, +30);
+		}
+		
+		this.proximaLeitura = ca.getTime();
 	}
-
+	
 	public BigDecimal getValorUltimaLeitura() {
 		return valorUltimaLeitura;
 	}
 
 	public void setValorUltimaLeitura(BigDecimal valorUltimaLeitura) {
 		this.valorUltimaLeitura = valorUltimaLeitura;
+	}
+	
+	public boolean verificaFevereiro(Calendar data) {
+		int mes = data.get(Calendar.MONTH); 
+		return mes == 2;
+	}
+	
+	public boolean verificaAnoBisexto(Calendar data) {
+		int ano = data.get(Calendar.YEAR);
+		if(ano % 400 == 0){
+            return true;
+        // se o ano for menor que 400
+        } else if((ano % 4 == 0) && (ano % 100 != 0)){
+        	return true;
+        } else{
+            return false;
+        }
 	}
 
 }

@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.reboucas.electricapp.domain.Consumo;
@@ -29,10 +32,12 @@ public class ConsumoService {
 	}
 
 	public BigDecimal consumoPorMes(Date ultimaLeitura, Date proximaLeitura) {
-		Calendar date = Calendar.getInstance();
-		date.setTime(proximaLeitura);
-		date.add(Calendar.DATE, -1);
-		proximaLeitura = date.getTime();
+		TimeZone tz = TimeZone.getTimeZone("America/Sao_Paulo");
+		TimeZone.setDefault(tz);
+		Calendar ca = GregorianCalendar.getInstance(tz);
+		ca.setTime(proximaLeitura);
+		ca.add(Calendar.DATE, -1);
+		proximaLeitura = ca.getTime();
 		
 		List<Consumo> consumos = consumoRepository.findByDataBetween(ultimaLeitura, 
 				proximaLeitura);

@@ -22,7 +22,7 @@ public class Consumo {
 	@NotNull
 	private BigDecimal valor;
 
-	@Temporal(TemporalType.DATE)	
+	@Temporal(TemporalType.TIMESTAMP)	
 	private Date data = new java.sql.Date(System.currentTimeMillis());
 
 	public Long getId() {
