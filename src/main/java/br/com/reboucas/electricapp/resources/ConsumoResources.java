@@ -46,6 +46,13 @@ public class ConsumoResources {
 						leitura.getProximaLeitura()));
 	}
 	
+//	@RequestMapping(value = "/{inicio}/{fim}", method = RequestMethod.GET)
+//	public ResponseEntity<List<Consumo>> listaConsumoPorMes(@PathVariable("inicio") Date dataInicio, 
+//			@PathVariable("fim") Date dataFim) {		
+//		return ResponseEntity.status(HttpStatus.OK).
+//				body(consumoService.listaConsumoPorMes(dataInicio,dataFim));
+//	}
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Consumo> getConsumo(@PathVariable("id") Long id ) {
 		return ResponseEntity.status(HttpStatus.OK).body(consumoService.getConsumo(id));
@@ -54,5 +61,10 @@ public class ConsumoResources {
 	@RequestMapping(value = "/por_mes", method = RequestMethod.GET)
 	public ResponseEntity<List<Leitura>> leiturasConsumoMes() {
 		return ResponseEntity.status(HttpStatus.OK).body(consumoService.leituraConsumoMes());
+	}
+	
+	@RequestMapping(value = "/ultimo", method = RequestMethod.GET)
+	public ResponseEntity<Consumo> ultimoConsumo() {
+		return ResponseEntity.status(HttpStatus.OK).body(consumoService.ultimoConsumo());
 	}
 }

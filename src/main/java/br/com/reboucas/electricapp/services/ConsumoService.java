@@ -54,19 +54,20 @@ public class ConsumoService {
 		List<Leitura> leiturasEnviar = new ArrayList<>();
 		BigDecimal consumoMes;
 		
-		for (int i = leituras.size()-1; i > 0; i--) {
-			consumoMes = leituras.get(i).getValorUltimaLeitura()
-					.subtract(leituras.get(i-1).getValorUltimaLeitura());
-			
+		for (int i = leituras.size()-2; i >= 0; i--) {
+			consumoMes = consumoPorMes(leituras.get(i).getUltimaLeitura(), leituras.get(i).getProximaLeitura());
 			leituras.get(i).setValorUltimaLeitura(consumoMes);
 			leiturasEnviar.add(leituras.get(i));
 		}
-		
-		leituras.get(0).setValorUltimaLeitura(consumoPorMes(leituras.get(0).getUltimaLeitura(), 
-				leituras.get(0).getProximaLeitura()));
-		
-		leiturasEnviar.add(leituras.get(0));
 		return leiturasEnviar;
+	}
+	
+	public List<Consumo> listaConsumoPorMes(Date dataInicio, Date dataFim) {
+		return consumoRepository.findByDataBetween(dataInicio, dataFim);
+	}
+	
+	public Consumo ultimoConsumo() {
+		return consumoRepository.ultimoConsumo();
 	}
 
 	public Consumo getConsumo(Long id) {

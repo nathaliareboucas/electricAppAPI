@@ -45,9 +45,9 @@ public class LeituraService {
 		BigDecimal consumoMes;
 		
 		while (hoje.after(ultimaLeitura.getProximaLeitura())) {
-			if (ultimaLeitura.getId() != 1) {
-				consumoMes = consumoService.consumoPorMes(ultimaLeitura.getUltimaLeitura(), ultimaLeitura.getProximaLeitura());
+			if (ultimaLeitura.getId() != 1) {				
 				Leitura leituraAnterior = buscar(ultimaLeitura.getId()-1);
+				consumoMes = consumoService.consumoPorMes(leituraAnterior.getUltimaLeitura(), leituraAnterior.getProximaLeitura());
 				ultimaLeitura.setValorUltimaLeitura(leituraAnterior.getValorUltimaLeitura()
 						.add(consumoMes));
 				
@@ -61,7 +61,7 @@ public class LeituraService {
 			ca.setTime(ultimaLeitura.getProximaLeitura());
 			leitura.setUltimaLeitura(ca.getTime());
 			
-			consumoMes = consumoService.consumoPorMes(leitura.getUltimaLeitura(), leitura.getProximaLeitura());
+			consumoMes = consumoService.consumoPorMes(ultimaLeitura.getUltimaLeitura(), ultimaLeitura.getProximaLeitura());
 			leitura.setValorUltimaLeitura(ultimaLeitura.getValorUltimaLeitura()
 					.add(consumoMes));
 			
