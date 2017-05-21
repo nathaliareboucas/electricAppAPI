@@ -13,5 +13,8 @@ public interface ConsumoRepository extends JpaRepository<Consumo, Long>{
 	public BigDecimal consumoTotal();
 	
 	public List<Consumo> findByDataBetween(Date inicio, Date fim);
+	
+	@Query(value="SELECT * FROM consumo ORDER BY id DESC LIMIT 1;", nativeQuery= true)
+	public Consumo ultimoConsumo();
 
 }
